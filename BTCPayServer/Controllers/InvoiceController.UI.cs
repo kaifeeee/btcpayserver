@@ -372,7 +372,8 @@ namespace BTCPayServer.Controllers
                             Overpaid = _CurrencyNameTable.DisplayFormatCurrency(
                                 accounting.OverpaidHelper.ToDecimal(MoneyUnit.BTC), paymentMethodId.CryptoCode),
                             Address = data.GetPaymentMethodDetails().GetPaymentDestination(),
-                            Rate = ExchangeRate(data)
+                            Rate = ExchangeRate(data),
+                            PaymentMethodRaw = data
                         };
                     }).ToList()
             };
