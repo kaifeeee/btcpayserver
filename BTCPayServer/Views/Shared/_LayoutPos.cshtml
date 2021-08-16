@@ -3,11 +3,13 @@
 
 @using BTCPayServer.Services.Apps
 @using BTCPayServer.Abstractions.Contracts
+@using BTCPayServer.Services.Stores
 @model BTCPayServer.Models.AppViewModels.ViewPointOfSaleViewModel
 @{
     ViewData["Title"] = Model.Title;
     Layout = null;
     var theme = await _settingsRepository.GetTheme();
+    
 }
 
 <!DOCTYPE html>

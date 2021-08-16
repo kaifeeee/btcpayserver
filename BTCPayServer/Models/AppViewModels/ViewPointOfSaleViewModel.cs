@@ -3,6 +3,8 @@ using BTCPayServer.Services.Apps;
 
 namespace BTCPayServer.Models.AppViewModels
 {
+    
+    
     public class ViewPointOfSaleViewModel
     {
         public class Item
