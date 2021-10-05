@@ -1957,12 +1957,12 @@ namespace BTCPayServer.Tests
 
             Assert.Empty(await adminClient.GetStorePaymentMethods(store.Id));
 
-            await adminClient.UpdateStoreLightningNetworkPaymentMethod(admin.StoreId, "BTC", new LightningNetworkPaymentMethodData("BTC", "Internal Node", true));
+            await adminClient.UpdateStoreLightningNetworkPaymentMethod(admin.StoreId, "BTC", new UpdateLightningNetworkPaymentMethodRequest("Internal Node", true));
 
             void VerifyLightning(Dictionary<string, GenericPaymentMethodData> dictionary)
             {
                 Assert.True(dictionary.TryGetValue(new PaymentMethodId("BTC", PaymentTypes.LightningLike).ToStringNormalized(), out var item));
-                var lightningNetworkPaymentMethodBaseData =Assert.IsType<JObject>(item.Data).ToObject<LightningNetworkPaymentMethodBaseData>();
+                var lightningNetworkPaymentMethodBaseData = Assert.IsType<JObject>(item.Data).ToObject<LightningNetworkPaymentMethodBaseData>();
                 Assert.Equal("Internal Node", lightningNetworkPaymentMethodBaseData.ConnectionString);
             }
 
@@ -1977,7 +1977,7 @@ namespace BTCPayServer.Tests
             void VerifyOnChain(Dictionary<string, GenericPaymentMethodData> dictionary)
             {
                 Assert.True(dictionary.TryGetValue(new PaymentMethodId("BTC", PaymentTypes.BTCLike).ToStringNormalized(), out var item));
-                var paymentMethodBaseData =Assert.IsType<JObject>(item.Data).ToObject<OnChainPaymentMethodBaseData>();
+                var paymentMethodBaseData = Assert.IsType<JObject>(item.Data).ToObject<OnChainPaymentMethodBaseData>();
                 Assert.Equal(randK, paymentMethodBaseData.DerivationScheme);
             }
             
@@ -1985,9 +1985,6 @@ namespace BTCPayServer.Tests
             Assert.Equal(2, methods.Count);
             VerifyLightning(methods);
             VerifyOnChain(methods);
-            
-
         }
-
     }
 }
