@@ -380,13 +380,10 @@ namespace BTCPayServer.HostedServices
 
                 if (req.ClaimRequest.Destination.Id != null)
                 {
-                    var problematicDuplicateStates = new[]
-                    {
-                        PayoutState.AwaitingApproval, PayoutState.AwaitingPayment, PayoutState.InProgress
-                    };
                     if (await ctx.Payouts.AnyAsync(data =>
                         data.DestinationId.Equals(req.ClaimRequest.Destination.Id) &&
-                        problematicDuplicateStates.Contains(data.State)))
+                        data.State != PayoutState.Completed && data.State != PayoutState.Cancelled
+                        ))
                     {
                         
                         req.Completion.TrySetResult(new ClaimRequest.ClaimResponse(ClaimRequest.ClaimResult.Duplicate));
