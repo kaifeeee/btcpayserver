@@ -15,7 +15,7 @@ namespace BTCPayServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.4");
+                .HasAnnotation("ProductVersion", "3.1.19");
 
             modelBuilder.Entity("BTCPayServer.Data.APIKeyData", b =>
                 {
@@ -509,6 +509,9 @@ namespace BTCPayServer.Migrations
                     b.Property<string>("Destination")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("DestinationId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("PaymentMethodId")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -527,12 +530,13 @@ namespace BTCPayServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Destination")
-                        .IsUnique();
+                    b.HasIndex("Destination");
 
                     b.HasIndex("PullPaymentDataId");
 
                     b.HasIndex("State");
+
+                    b.HasIndex("DestinationId", "State");
 
                     b.ToTable("Payouts");
                 });

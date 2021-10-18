@@ -22,6 +22,7 @@ namespace BTCPayServer.Data
         public string Destination { get; set; }
         public byte[] Blob { get; set; }
         public byte[] Proof { get; set; }
+        public string? DestinationId { get; set; }
 
 
         internal static void OnModelCreating(ModelBuilder builder)
@@ -29,15 +30,15 @@ namespace BTCPayServer.Data
             builder.Entity<PayoutData>()
                 .HasOne(o => o.PullPaymentData)
                 .WithMany(o => o.Payouts).OnDelete(DeleteBehavior.Cascade);
-
             builder.Entity<PayoutData>()
                 .Property(o => o.State)
                 .HasConversion<string>();
             builder.Entity<PayoutData>()
-                .HasIndex(o => o.Destination)
-                .IsUnique();
+                .HasIndex(o => o.Destination);
             builder.Entity<PayoutData>()
                 .HasIndex(o => o.State);
+            builder.Entity<PayoutData>()
+                .HasIndex(x => new {x.DestinationId, x.State});
         }
 
         // utility methods

@@ -70,11 +70,10 @@ public class BitcoinLikePayoutHandler : IPayoutHandler
         destination = destination.Trim();
         try
         {
-            // This doesn't work properly, (payouts are not detected), we can reactivate later when we fix the bug https://github.com/btcpayserver/btcpayserver/issues/2765
-            //if (destination.StartsWith($"{network.UriScheme}:", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    return Task.FromResult<IClaimDestination>(new UriClaimDestination(new BitcoinUrlBuilder(destination, network.NBitcoinNetwork)));
-            //}
+            if (destination.StartsWith($"{network.UriScheme}:", StringComparison.OrdinalIgnoreCase))
+            {
+                return Task.FromResult<(IClaimDestination, string)>((new UriClaimDestination(new BitcoinUrlBuilder(destination, network.NBitcoinNetwork)), null));
+            }
 
             return Task.FromResult<(IClaimDestination, string)>((new AddressClaimDestination(BitcoinAddress.Create(destination, network.NBitcoinNetwork)), null));
         }
@@ -354,10 +353,10 @@ public class BitcoinLikePayoutHandler : IPayoutHandler
                 .Where(p => p.State == PayoutState.AwaitingPayment)
                 .Where(p => p.PaymentMethodId == paymentMethodId.ToString())
 #pragma warning disable CA1307 // Specify StringComparison
-                .Where(p => destination.Equals(p.Destination))
+                .Where(p => destination.Equals(p.DestinationId))
 #pragma warning restore CA1307 // Specify StringComparison
                 .ToListAsync();
-            var payoutByDestination = payouts.ToDictionary(p => p.Destination);
+            var payoutByDestination = payouts.ToDictionary(p => p.DestinationId);
 
             if (!payoutByDestination.TryGetValue(destination, out var payout))
                 return;
